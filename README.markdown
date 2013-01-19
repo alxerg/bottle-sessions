@@ -32,15 +32,9 @@ Advantages:
 
 Requirements.txt
 -
-_*DETAILED REQUIREMENT TO BE SPECIFIED*_
-
-MySQL-python==1.2.4c1<br/>
-SQLAlchemy==0.7.9<br/>
-bottle==0.11.4<br/>
-bottle-sqlalchemy==0.3.1<br/>
-distribute==0.6.31<br/>
-gevent==0.13.8<br/>
-greenlet==0.4.0<br/>
+Python : 2.7.3<br/>
+MySQL-python : 1.2.4c1<br/>
+SQLAlchemy : 0.7.9<br/>
 
 Limitations:
 -
