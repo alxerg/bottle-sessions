@@ -1,22 +1,17 @@
-gae-sessions
+bottle-sessions
 =
 
-gae-sessions is a sessions library for the Python runtime on Google App Engine
-for ALL session sizes.  It is extremely fast, lightweight (one file), and easy
-to use.
+bottle-sessions is a sessions library derived from [gae-session](https://github.com/dound/gae-sessions) for [Bottle python framework](http://bottlepy.org/docs/dev/) for ALL session sizes.  It is extremely fast, lightweight (one file), and easy to use. 
+
+
 
 Advantages:
 -
- * __Lightweight__: One short file and references to a handful of built-in Python libraries.
+ * __Lightweight__: One short file and references to very popular Python libraries.
  * __Fast and Efficient__
-     - [__Orders of magnitude
-       faster__](http://wiki.github.com/dound/gae-sessions/comparison-with-alternative-libraries)
-       than other session libraries for app engine.
      - Uses secure cookies for small sessions to minimize overhead.
      - Uses memcache to minimize read times for larger sessions.
-     - Minimizes gets() and puts() by compactly storing all values in one field.
-     - Automatically converts db.Model instances to protobufs for more
-       efficient storage and CPU usage.
+     - Minimizes number of database query() by compactly storing all values in one field.
      - Frequency of writes is minimized by *only writing if there is a change*,
        and *only once per request* (when the response is being sent).
      - Session data is lazily loaded - if you don't use the session for a
@@ -35,6 +30,18 @@ Advantages:
      - Thread-safe.
 
 
+Requirements.txt
+-
+_*DETAILED REQUIREMENT TO BE SPECIFIED*_
+
+MySQL-python==1.2.4c1<br/>
+SQLAlchemy==0.7.9<br/>
+bottle==0.11.4<br/>
+bottle-sqlalchemy==0.3.1<br/>
+distribute==0.6.31<br/>
+gevent==0.13.8<br/>
+greenlet==0.4.0<br/>
+
 Limitations:
 -
   * Limited to 1MB of data in a session.  (to fit in a single memcache entry)
@@ -43,30 +50,8 @@ Limitations:
 Installation
 -
 
-After downloading and unpacking gae-sessions, copy the 'gaesessions' folder into
-your app's root directory.
+_*DETAILED SETUP INSTRUCTIONS TO BE ADDED*_
 
-gae-sessions includes WSGI middleware to make it easy to integrate into your app
-- you just need to add in the middleware.  If you're using App Engine's built-in
-webapp framework, or any other framework that calls the
-[run_wsgi_app](http://code.google.com/appengine/docs/python/tools/webapp/utilmodule.html)
-function, you can use App Engine's configuration framework to install
-gae-sessions.  Create a file called `appengine_config.py` in your app's root
-directory, and put the following in it:
-
-    from gaesessions import SessionMiddleware
-    def webapp_add_wsgi_middleware(app):
-        app = SessionMiddleware(app, cookie_key="a random and long string")
-        return app
-
-If you want to gae-sessions with Django, add
-<code>'gaesessions.DjangoSessionMiddleware'</code> to your list of
-<code>MIDDLEWARE_CLASSES</code> in your `settings.py` file.  You can then access
-the session associated with the current request via the `request.session`
-variable.  To configure the Django middleware, modify the following line in
-`gaesessions/__init__.py`:
-
-    self.wrapped_wsgi_middleware = SessionMiddleware(fake_app, cookie_key='you MUST change this')
 
 Small sessions are stored in __secure__ cookies.  The required `cookie_key`
 parameter is used to sign cookies with an HMAC-SHA256 signature.  This enables
@@ -88,10 +73,8 @@ disabled, then small sessions will still be stored in cookies (this is faster
 than memcache).
 
 You will also want to create a cronjob to periodically remove expired sessions
-from the datastore.  You can find the [example
-cronjob](http://github.com/dound/gae-sessions/tree/master/demo/cron.yaml) and
-the [cleanup handler](http://github.com/dound/gae-sessions/tree/master/demo/cleanup_sessions.py)
-it calls in the [demo](http://github.com/dound/gae-sessions/tree/master/demo/).
+from the datastore. <code>*CRON JOB EXAMPLE TO BE ADDED*</code>
+
 
 If you *only* want session information (including the session ID) to be sent
 from the client when the user accesses the server over SSL (i.e., when accessing
@@ -104,42 +87,12 @@ will *not* send any session cookies when requesting non-https URLs.
 
 Example Usage
 -
+_*EXAMPLES TO BE ADDED*_
 
-There is a complete demo application in the [demo
-folder](http://github.com/dound/gae-sessions/tree/master/demo/) - just launch it with
-the development server (or upload it to GAE) and check it out.  This demo uses
-OpenID via [RPX](http://www.rpxnow.com) for user authentication.  There's
-another demo in the 'demo-with-google-logins' folder which uses Google Accounts
-for authentication Here's a few lines of example code too:
+Author
+-
 
-    from gaesessions import get_current_session
-    session = get_current_session()
-    if session.is_active():
-        c = session.get('counter', 0)
-        session['counter'] = c + 1
-        session['blah'] = 325
-        del session['blah']  # remove 'blah' from the session
-        # model instances and other complex objects can be stored too
-
-        # If you don't care if a particular change to the session is persisted
-        # to the datastore, then you can use the "quick" methods.  They will
-        # only cause the session to be stored to memcache.  Of course if you mix
-        # regular and quick methods, then everything will be persisted to the
-        # datastore (and memcache) at the end of the request like usual.
-        session.set_quick('x', 9)
-        x = session.get('x')
-        x = session.pop_quick('x')
-
-    # ...
-    # when the user logs in, it is recommended that you rotate the session ID (security)
-    session.regenerate_id()
-
-
-_Author_: [David Underhill](http://www.dound.com)  
-_Updated_: 2011-Jul-03 (v1.07)  
+_Author_: [gae-session](https://github.com/dound/gae-sessions), [David Underhill](http://www.dound.com) <br/>
+_Author_: [Sung-Taek, Kim](http://twitter.com/stkim1)
+_Updated_: 2012-Jan-15 (v1.0.0)  
 _License_: Apache License Version 2.0
-
-For more information, please visit the [gae-sessions webpage](http://wiki.github.com/dound/gae-sessions/).
-
-If you discover a problem, please report it on the
-[gae-sessions issues page](http://github.com/dound/gae-sessions/issues).
