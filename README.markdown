@@ -35,6 +35,7 @@ Requirements.txt
 Python : 2.7.3<br/>
 MySQL-python : 1.2.4c1<br/>
 SQLAlchemy : 0.7.9<br/>
+python-memcached : 1.48
 
 Limitations:
 -
